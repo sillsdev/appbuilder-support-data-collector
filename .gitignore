@@ -28,28 +28,35 @@ go.work.sum
 # ============================================================
 
 # Wails build output
+/.task
 /build/bin/
 /build/appicon.png
 
 # Generated platform-specific build artifacts
-/build/windows/*.exe
-/build/darwin/*.app
+/build/windows/*
+/build/darwin/*
 /build/linux/*
+# Generated mobile (per-machine; overlays hold absolute paths)
+/build/ios/xcode/overlay.json
+/build/ios/xcode/gen/
+/build/android/overlay.json
+/build/android/gen/
 
 # ============================================================
 # Node / Svelte / TypeScript
 # ============================================================
 
 # Dependencies
-node_modules/
+frontend/node_modules/
 
 # Build output
-.svelte-kit/
-.vite/
-dist/
+frontend/.svelte-kit/
+frontend/.vite/
+frontend/bindings/
+frontend/dist/
 
 # TypeScript
-*.tsbuildinfo
+frontend/*.tsbuildinfo
 
 # ============================================================
 # Environment / local configuration
