@@ -1,0 +1,94 @@
+# ============================================================
+# Go
+# ============================================================
+
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Build output
+/bin/
+/dist/
+
+# Coverage
+coverage.out
+coverage.html
+*.coverprofile
+
+# Go workspace
+go.work
+go.work.sum
+
+# ============================================================
+# Wails
+# ============================================================
+
+# Wails build output
+/build/bin/
+/build/appicon.png
+
+# Generated platform-specific build artifacts
+/build/windows/*.exe
+/build/darwin/*.app
+/build/linux/*
+
+# ============================================================
+# Node / Svelte / TypeScript
+# ============================================================
+
+# Dependencies
+node_modules/
+
+# Build output
+.svelte-kit/
+.vite/
+dist/
+
+# TypeScript
+*.tsbuildinfo
+
+# ============================================================
+# Environment / local configuration
+# ============================================================
+
+.env
+.env.local
+.env.*.local
+
+# ============================================================
+# IDE / Editors
+# ============================================================
+
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+.idea/
+*.iml
+
+# ============================================================
+# OS files
+# ============================================================
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ============================================================
+# Temporary files
+# ============================================================
+
+*.tmp
+*.temp
+*.log
+
+tmp/
+temp/
