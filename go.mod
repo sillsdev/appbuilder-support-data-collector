@@ -1,4 +1,4 @@
-module changeme
+module github.com/sillsdev/appbuilder-support-data-collector
 
 go 1.25.0
 
