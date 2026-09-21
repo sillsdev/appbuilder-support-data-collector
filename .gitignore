@@ -13,6 +13,8 @@
 # Build output
 /bin/
 /dist/
+# Pre-built binaries staged for goreleaser (see .github/workflows/release.yml)
+/dist-artifacts/
 
 # Coverage
 coverage.out
