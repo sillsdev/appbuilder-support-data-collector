@@ -1,0 +1,28 @@
+version: 2
+
+project_name: sdc
+
+# Binaries are built per-OS in CI (build/*/Taskfile.yml via `wails3 task <os>:build`),
+# not by goreleaser itself: Wails uses cgo (GTK4 + WebKitGTK 6.0 on Linux, Cocoa/WebKit
+# on macOS), which goreleaser's OSS build step cannot cross-compile from one machine.
+# The prebuilt binaries are attached directly below via release.extra_files.
+builds:
+  - skip: true
+
+checksum:
+  disable: true
+
+release:
+  github:
+    owner: sillsdev
+    name: appbuilder-support-data-collector
+  extra_files:
+    - glob: ./dist-artifacts/*
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^ci:"

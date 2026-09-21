@@ -9,7 +9,7 @@ A desktop application built with [Wails3](https://v3alpha.wails.io/), using a Go
 - Platform build tools:
   - **macOS**: Xcode command line tools (`xcode-select --install`)
   - **Windows**: WebView2 (usually preinstalled on Windows 10/11) and a C compiler (e.g. via MSYS2/TDM-GCC)
-  - **Linux**: `gtk3` and `webkit2gtk` development packages
+  - **Linux**: `gtk4` and `webkitgtk-6.0` development packages (e.g. `libgtk-4-dev libwebkitgtk-6.0-dev` on Ubuntu 24.04+/Debian 13+)
 
 ## Installing the Wails3 CLI
 
@@ -56,6 +56,12 @@ wails3 build
 ```
 
 Build output is written to `build/bin/`.
+
+## Releases
+
+Pushing a `v*` tag triggers [`.github/workflows/release.yml`](.github/workflows/release.yml), which builds a plain binary natively for Linux (amd64), macOS (arm64 + amd64), and Windows (amd64), then uses [goreleaser](https://goreleaser.com/) to attach them to a GitHub Release along with a `checksums.txt`.
+
+These are unpackaged binaries only, meant to be consumed by [Scripture App Builder](https://software.sil.org/scriptureappbuilder/)'s own packaging (e.g. its Linux Flatpak, which supplies the GTK4/WebKitGTK 6.0 runtime dependencies) - not installers in their own right. Standalone installable packages (`.deb`/`.rpm`/AppImage via `wails3 task linux:package`, a signed `.msi`/`.exe`, a signed `.dmg`) may be added later if this app needs to be distributed independently of SAB.
 
 ## Project Structure
 

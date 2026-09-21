@@ -1,0 +1,99 @@
+name: Release
+
+# Builds a plain, unpackaged binary for each OS/arch and attaches them to a
+# GitHub Release. These binaries are consumed by Scripture App Builder's own
+# packaging (e.g. the Flatpak on Linux, which supplies GTK4 + WebKitGTK 6.0 at
+# runtime) - they are not installers themselves.
+#
+# Wails uses cgo (GTK4/WebKitGTK 6.0 on Linux, Cocoa/WebKit on macOS), so each
+# binary must be built natively on its own OS; goreleaser only collects and
+# publishes the results (see .goreleaser.yaml: builds are skipped there).
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            arch: amd64
+          - os: macos-latest
+            platform: darwin
+            arch: arm64
+          - os: macos-latest
+            platform: darwin
+            arch: amd64
+          - os: windows-latest
+            platform: windows
+            arch: amd64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.25"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+
+      - name: Install Wails3 CLI
+        run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
+
+      - name: Install Linux build dependencies
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-4-dev libwebkitgtk-6.0-dev
+
+      - name: Build
+        run: wails3 task ${{ matrix.platform }}:build ARCH=${{ matrix.arch }}
+
+      - name: Stage binary
+        shell: bash
+        run: |
+          mkdir -p dist-artifacts
+          ext=""
+          if [ "${{ matrix.platform }}" = "windows" ]; then ext=".exe"; fi
+          cp "bin/sdc${ext}" "dist-artifacts/sdc_${{ matrix.platform }}_${{ matrix.arch }}${ext}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdc_${{ matrix.platform }}_${{ matrix.arch }}
+          path: dist-artifacts/*
+          if-no-files-found: error
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist-artifacts
+          merge-multiple: true
+
+      - name: Generate checksums
+        working-directory: dist-artifacts
+        run: sha256sum * > checksums.txt
+
+      - uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
