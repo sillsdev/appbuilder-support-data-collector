@@ -8,7 +8,7 @@ A desktop application built with [Wails3](https://v3alpha.wails.io/), using a Go
 - [Node.js](https://nodejs.org/) (LTS) and npm
 - Platform build tools:
   - **macOS**: Xcode command line tools (`xcode-select --install`)
-  - **Windows**: WebView2 (usually preinstalled on Windows 10/11) and a C compiler (e.g. via MSYS2/TDM-GCC)
+  - **Windows**: WebView2 (usually preinstalled on Windows 10/11). No C compiler is needed — Wails3's Windows backend is pure Go/CGO-free; one would only be required if a future dependency needs cgo.
   - **Linux**: `gtk4` and `webkitgtk-6.0` development packages (e.g. `libgtk-4-dev libwebkitgtk-6.0-dev` on Ubuntu 24.04+/Debian 13+)
 
 ## Installing the Wails3 CLI
@@ -16,7 +16,7 @@ A desktop application built with [Wails3](https://v3alpha.wails.io/), using a Go
 Wails3 is currently in beta. Install the CLI with:
 
 ```bash
-go install github.com/wailsapp/wails/v3/cmd/wails3@latest
+go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-beta.24
 ```
 
 Confirm it installed correctly:
