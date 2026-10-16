@@ -8,9 +8,9 @@ export interface WizardPageDef {
   /** Unique name for the page. */
   id: string;
   /** Bold heading shown in the band at the top of the wizard. */
-  title: string;
+  title: string | (() => string);
   /** Line of explanation shown under the title. */
-  subtitle?: string;
+  subtitle?: string | (() => string);
   /** The Svelte component that renders the page's content. */
   component: Component<any, any>;
   /**

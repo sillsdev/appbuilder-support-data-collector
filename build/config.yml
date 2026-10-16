@@ -34,14 +34,25 @@ dev_mode:
       - "*_test.go"
     watched_extension:
       - "*.go"
-      - "*.js" # Watch for changes to JS/TS files included using the //wails:include directive.
-      - "*.ts" # The frontend directory will be excluded entirely by the setting above.
+      - "*.js"
+      - "*.ts"
     git_ignore: true
+
   executes:
     - cmd: wails3 build DEV=true
       type: blocking
     - cmd: wails3 task common:dev:frontend
       type: background
+    - cmd: |
+        for i in $(seq 1 60); do
+          if curl -fsS http://127.0.0.1:${WAILS_VITE_PORT:-9245}/ -o /dev/null; then
+            exit 0
+          fi
+          sleep 1
+        done
+        echo "Vite did not become ready within 60 seconds" >&2
+        exit 1
+      type: once
     - cmd: wails3 task run
       type: primary
 

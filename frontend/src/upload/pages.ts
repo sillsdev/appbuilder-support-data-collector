@@ -2,25 +2,26 @@ import type { WizardPageDef } from "../wizard/types";
 import ProjectPage from "./pages/ProjectPage.svelte";
 import UploadPage from "./pages/UploadPage.svelte";
 import CompletePage from "./pages/CompletePage.svelte";
+import { m } from "../lib/paraglide/messages.js";
 
 /** The pages of the upload wizard, in order. */
 export const pages: WizardPageDef[] = [
   {
     id: "project",
-    title: "Project",
-    subtitle: "Check the project and where its support data will be sent",
+    title: () => m.project_page_title(),
+    subtitle: () => m.project_page_subtitle(),
     component: ProjectPage,
   },
   {
     id: "upload",
-    title: "Upload",
-    subtitle: "Send the project's support data to the support system",
+    title: () => m.upload_page_title(),
+    subtitle: () => m.upload_page_subtitle(),
     component: UploadPage,
   },
   {
     id: "complete",
-    title: "Upload Complete",
-    subtitle: "The support data has been sent",
+    title: () => m.complete_page_title(),
+    subtitle: () => m.complete_page_subtitle(),
     component: CompletePage,
   },
 ];

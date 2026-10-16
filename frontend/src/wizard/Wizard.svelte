@@ -8,6 +8,8 @@
 <script lang="ts">
   import { setWizard } from "./context";
   import type { WizardPageDef, WizardPageHooks } from "./types";
+  import { m } from "../lib/paraglide/messages.js";
+  import { getLocale, locales, setLocale } from "../lib/paraglide/runtime.js";
 
   interface Props {
     pages: WizardPageDef[];
@@ -18,6 +20,7 @@
   }
 
   let { pages, onfinish, oncancel }: Props = $props();
+  let locale = $state(getLocale());
 
   /** Index of the nearest page from `start` (inclusive) moving by `step` that is shown, or -1. */
   function findShownPage(start: number, step: 1 | -1): number {
@@ -45,7 +48,20 @@
   let canBack = $derived(!busy && previousIndex !== -1 && (hooks?.canBack?.() ?? true));
   let canNext = $derived(!busy && (hooks?.canNext?.() ?? true));
   let canCancel = $derived(hooks?.canCancel?.() ?? true);
-  let nextCaption = $derived(hooks?.nextCaption?.() ?? (isLastPage ? "Finish" : "Next"));
+  let nextCaption = $derived(hooks?.nextCaption?.() ?? (isLastPage ? m.finish() : m.next()));
+  let pageTitle = $derived(typeof page.title === "function" ? page.title() : page.title);
+  let pageSubtitle = $derived(
+    typeof page.subtitle === "function" ? page.subtitle() : page.subtitle,
+  );
+
+  function changeLocale(event: Event): void {
+    const selected = (event.currentTarget as HTMLSelectElement).value;
+    if (locales.includes(selected as (typeof locales)[number])) {
+      const nextLocale = selected as (typeof locales)[number];
+      setLocale(nextLocale, { reload: false });
+      locale = nextLocale;
+    }
+  }
 
   function goNext(): void {
     if (isLastPage) {
@@ -81,25 +97,42 @@
   setWizard({ moveToNextPage: goNext });
 </script>
 
-<div class="flex h-dvh flex-col bg-base-100">
-  <header class="border-b border-base-300 bg-base-200 px-4 py-3">
-    <h1 class="font-semibold">{page.title}</h1>
-    {#if page.subtitle}
-      <p class="text-sm text-base-content/70">{page.subtitle}</p>
-    {/if}
-  </header>
+{#key locale}
+  <div class="flex h-dvh flex-col bg-base-100">
+    <header class="flex items-start justify-between gap-4 border-b border-base-300 bg-base-200 px-4 py-3">
+      <div>
+        <h1 class="font-semibold">{pageTitle}</h1>
+        {#if pageSubtitle}
+          <p class="text-sm text-base-content/70">{pageSubtitle}</p>
+        {/if}
+      </div>
+      <label class="flex items-center gap-2 text-sm">
+        <span>{m.language()}</span>
+        <select class="dy-select dy-select-sm" value={locale} onchange={changeLocale}>
+          <option value="en">English</option>
+          <option value="fr">Français</option>
+          <option value="es">Español</option>
+          <option value="pt-BR">Português (Brasil)</option>
+          <option value="ru">Русский</option>
+          <option value="vi">Tiếng Việt</option>
+          <option value="zh-CN">简体中文</option>
+          <option value="th">ไทย</option>
+        </select>
+      </label>
+    </header>
 
-  <main class="flex-1 overflow-y-auto px-6 py-5">
-    <!-- Changing the component recreates the page, so its setup code runs each time it is shown. -->
-    <page.component bind:this={hooks} />
-  </main>
+    <main class="flex-1 overflow-y-auto px-6 py-5">
+      <!-- Changing the component recreates the page, so its setup code runs each time it is shown. -->
+      <page.component bind:this={hooks} />
+    </main>
 
-  <footer class="flex justify-end gap-2 px-4 py-3">
-    <button class="dy-btn dy-btn-sm" disabled={!canBack} onclick={onBackClick}>Back</button>
-    <button class="dy-btn dy-btn-sm dy-btn-primary" disabled={!canNext} onclick={onNextClick}>
-      {#if busy}<span class="dy-loading dy-loading-spinner dy-loading-xs"></span>{/if}
-      {nextCaption}
-    </button>
-    <button class="dy-btn dy-btn-sm" disabled={!canCancel} onclick={onCancelClick}>Cancel</button>
-  </footer>
-</div>
+    <footer class="flex justify-end gap-2 px-4 py-3">
+      <button class="dy-btn dy-btn-sm" disabled={!canBack} onclick={onBackClick}>{m.back()}</button>
+      <button class="dy-btn dy-btn-sm dy-btn-primary" disabled={!canNext} onclick={onNextClick}>
+        {#if busy}<span class="dy-loading dy-loading-spinner dy-loading-xs"></span>{/if}
+        {nextCaption}
+      </button>
+      <button class="dy-btn dy-btn-sm" disabled={!canCancel} onclick={onCancelClick}>{m.cancel()}</button>
+    </footer>
+  </div>
+{/key}
