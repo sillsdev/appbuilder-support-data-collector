@@ -22,6 +22,7 @@ var assets embed.FS
 // The project folder to upload may be passed as the first command line argument.
 func main() {
 	projectService := &ProjectService{}
+	uploadService := &UploadService{}
 	if len(os.Args) > 1 {
 		projectService.folder = os.Args[1]
 	}
@@ -36,6 +37,7 @@ func main() {
 		Description: "Upload App Builder project data to the support system",
 		Services: []application.Service{
 			application.NewService(projectService),
+			application.NewService(uploadService),
 		},
 		Assets: application.AssetOptions{
 			Handler: application.AssetFileServerFS(assets),
