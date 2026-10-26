@@ -1,6 +1,6 @@
 # AppBuilder Support Data Collector
 
-A desktop application built with [Wails3](https://v3alpha.wails.io/), using a Go backend and a Svelte/TypeScript frontend.
+A desktop application built with [Wails3](https://v3.wails.io/), using a Go backend and a Svelte/TypeScript frontend.
 
 ## Prerequisites
 
@@ -13,10 +13,10 @@ A desktop application built with [Wails3](https://v3alpha.wails.io/), using a Go
 
 ## Installing the Wails3 CLI
 
-Wails3 is currently in beta. Install the CLI with:
+Install the Wails3 CLI with:
 
 ```bash
-go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-beta.24
+go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0
 ```
 
 Confirm it installed correctly:
@@ -88,7 +88,7 @@ A typical Wails3 project is laid out as:
 
 ## Learn More
 
-- [Wails3 Documentation](https://v3alpha.wails.io/)
+- [Wails3 Documentation](https://v3.wails.io/)
 - [Wails3 GitHub Repository](https://github.com/wailsapp/wails)
 
 ## License
