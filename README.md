@@ -86,6 +86,27 @@ A typical Wails3 project is laid out as:
 └── wails.json        # Wails project configuration
 ```
 
+## Shared support-data package
+
+The reusable [`@sil/support-data`](./packages/support-data/) package contains
+the authoritative support-data catalog, the versioned collection-request
+contract, runtime validation/serialization helpers, and the Svelte 5
+`SupportDataSelector` component. The desktop frontend consumes it through a
+local Vite/TypeScript alias; it is not currently published to a registry.
+
+Collection requests use schema version `1` and contain `requestId`,
+`schemaVersion`, `supportUrl`, and `requestedItems`. Portal input must be
+validated with `parseCollectionRequest` before use. Requested items are only
+initial recommendations: the user's final selection is authoritative. The
+package deliberately does not map IDs to filesystem paths, collect secrets, or
+perform uploads.
+
+The current desktop application uses a representative local request because
+the portal repository and live integration are not available here. Portal
+adoption should consume the same package version and request schema, then pass
+the validated request to the selector. Publishing, registry credentials, and
+portal changes remain outside this repository.
+
 ## Learn More
 
 - [Wails3 Documentation](https://v3.wails.io/)
