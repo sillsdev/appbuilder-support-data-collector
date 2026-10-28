@@ -1,4 +1,5 @@
 import type { ProjectInfo } from "../../bindings/github.com/sillsdev/appbuilder-support-data-collector";
+import type { ProjectDataSelection } from "../components/projectData";
 
 /**
  * Details shared between the pages of the upload wizard. Pages read and write
@@ -12,4 +13,9 @@ export const upload = $state({
   uploadUrl: "",
   /** Whether the mock access flow has been completed. */
   accessGranted: false,
+  /** The project data categories requested by support and selected for upload. */
+  selectedProjectData: {
+    projectConfiguration: true,
+    projectContent: true,
+  } as ProjectDataSelection,
 });

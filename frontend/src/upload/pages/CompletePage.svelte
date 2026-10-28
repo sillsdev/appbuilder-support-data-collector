@@ -1,6 +1,9 @@
 <script lang="ts">
+  import { getSelectedProjectDataItems } from "../../components/projectData";
   import { upload } from "../state.svelte";
   import { m } from "../../lib/paraglide/messages.js";
+
+  let selectedItems = $derived(getSelectedProjectDataItems(upload.selectedProjectData));
 
   export function canBack(): boolean {
     return false;
@@ -19,7 +22,19 @@
 </div>
 
 <section class="rounded-box border border-base-300 bg-base-200 p-4">
-  <h3 class="mb-3 text-sm font-semibold">{m.upload_progress()}</h3>
+ <h3 class="mb-3 text-sm font-semibold">{m.upload_progress()}</h3>
+  
+  <p class="mb-2 text-sm text-base-content/70">Project data selected for this upload:</p>
+  {#if selectedItems.length > 0}
+    <ul class="list-inside list-disc text-sm mb-4">
+      {#each selectedItems as item (item.id)}
+        <li>{item.fileName(upload.project?.name ?? "")}</li>
+      {/each}
+    </ul>
+  {:else}
+    <p class="text-sm text-base-content/70 mb-4">No project files were selected for upload.</p>
+  {/if}
+
   <textarea
     class="dy-textarea h-48 w-full font-mono text-sm leading-6"
     readonly
