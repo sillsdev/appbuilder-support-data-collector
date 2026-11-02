@@ -16,7 +16,7 @@ A desktop application built with [Wails3](https://v3.wails.io/), using a Go back
 Install the Wails3 CLI with:
 
 ```bash
-go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0
+go install github.com/wailsapp/wails/v3/cmd/wails3@v3.1.0
 ```
 
 Confirm it installed correctly:
