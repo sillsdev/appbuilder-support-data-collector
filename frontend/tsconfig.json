@@ -4,6 +4,11 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
+    "baseUrl": ".",
+    "paths": {
+      "@sil/support-data": ["../packages/support-data/src/index.ts"],
+      "@sil/support-data/*": ["../packages/support-data/src/*"]
+    },
     "resolveJsonModule": true,
     /**
      * Typecheck JS in `.svelte` and `.js` files by default.
@@ -16,5 +21,17 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "bindings"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.svelte",
+    "bindings",
+    "../packages/support-data/src/**/*.ts",
+    "../packages/support-data/src/**/*.svelte"
+  ],
+  "exclude": [
+    "../packages/support-data/src/**/*.test.ts",
+    "src/paraglide/**",
+    "src/lib/paraglide/**"
+  ]
 }

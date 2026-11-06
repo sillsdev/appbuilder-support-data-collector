@@ -1,4 +1,5 @@
 import type { ProjectInfo } from "../../bindings/github.com/sillsdev/appbuilder-support-data-collector";
+import type { CollectionRequest, SupportDataItemId } from "@sil/support-data";
 
 /**
  * Details shared between the pages of the upload wizard. Pages read and write
@@ -12,4 +13,8 @@ export const upload = $state({
   uploadUrl: "",
   /** Whether the mock access flow has been completed. */
   accessGranted: false,
+  /** The validated portal request or local representative fixture. */
+  collectionRequest: undefined as CollectionRequest | undefined,
+  /** The user's authoritative final selection for collection. */
+  selectedItems: [] as SupportDataItemId[],
 });

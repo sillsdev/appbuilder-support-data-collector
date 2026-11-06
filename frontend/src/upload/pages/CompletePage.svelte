@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getSupportDataItem } from "@sil/support-data";
   import { upload } from "../state.svelte";
   import { m } from "../../lib/paraglide/messages.js";
 
@@ -9,6 +10,10 @@
   export function canCancel(): boolean {
     return false;
   }
+
+  const selectedItemNames = $derived(
+    upload.selectedItems.map((id) => getSupportDataItem(id).displayName),
+  );
 </script>
 
 <div class="mb-5">

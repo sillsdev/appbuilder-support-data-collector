@@ -48,6 +48,7 @@ go.work.sum
 
 # Dependencies
 frontend/node_modules/
+node_modules/
 
 # Build output
 frontend/.svelte-kit/

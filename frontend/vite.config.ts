@@ -3,11 +3,14 @@ import { paraglideVitePlugin } from "@inlang/paraglide-js";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import wails from "@wailsio/runtime/plugins/vite";
 import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 
 // Read the pinned Wails version straight from go.mod so the footer can't
 // drift out of sync with it the way a hardcoded string did.
 const goMod = readFileSync(new URL("../go.mod", import.meta.url), "utf-8");
+const configDir = fileURLToPath(new URL(".", import.meta.url));
 const wailsVersion = goMod.match(
   /^require github\.com\/wailsapp\/wails\/v3 (\S+)/m,
 )?.[1];
@@ -17,6 +20,11 @@ if (!wailsVersion) {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      "@sil/support-data": resolve(configDir, "../packages/support-data/src"),
+    },
+  },
   server: {
     host: "127.0.0.1",
     port: Number(process.env.WAILS_VITE_PORT) || 9245,

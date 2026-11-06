@@ -6,11 +6,20 @@
   import { Dialogs } from "@wailsio/runtime";
   import { marked } from "marked";
   import { ProjectService } from "../../../bindings/github.com/sillsdev/appbuilder-support-data-collector";
+  import {
+    createCollectionRequest,
+    type SupportDataItemId,
+  } from "@sil/support-data";
   import { upload } from "../state.svelte";
   import { formatBytes, formatDateTime } from "../format";
   import { m } from "../../lib/paraglide/messages.js";
 
   const UPLOAD_URL_PLACEHOLDER = "https://app.scriptoria.io/support/[id]";
+  const REPRESENTATIVE_REQUESTED_ITEMS: SupportDataItemId[] = [
+    "project-config",
+    "project-content",
+    "build-diagnostics",
+  ];
   // Trusted static content; do not replace this with user-provided Markdown.
   const disclaimerHtml = $derived(marked.parse(m.disclaimer_markdown()));
 
@@ -54,6 +63,20 @@
 
   export function canNext(): boolean {
     return upload.project !== undefined && upload.uploadUrl.trim() !== "";
+  }
+
+  export function onNext(): boolean {
+    const supportUrl = upload.uploadUrl.trim();
+    const previousRequest = upload.collectionRequest;
+    upload.collectionRequest = createCollectionRequest(
+      "desktop-representative-request",
+      supportUrl,
+      REPRESENTATIVE_REQUESTED_ITEMS,
+    );
+    if (!previousRequest || previousRequest.supportUrl !== supportUrl) {
+      upload.selectedItems = [...REPRESENTATIVE_REQUESTED_ITEMS];
+    }
+    return true;
   }
 </script>
 

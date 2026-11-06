@@ -1,5 +1,6 @@
 import type { WizardPageDef } from "../wizard/types";
 import ProjectPage from "./pages/ProjectPage.svelte";
+import SupportDataPage from "./pages/SupportDataPage.svelte";
 import UploadPage from "./pages/UploadPage.svelte";
 import CompletePage from "./pages/CompletePage.svelte";
 import { m } from "../lib/paraglide/messages.js";
@@ -11,6 +12,12 @@ export const pages: WizardPageDef[] = [
     title: () => m.project_page_title(),
     subtitle: () => m.project_page_subtitle(),
     component: ProjectPage,
+  },
+  {
+    id: "support-data",
+    title: () => m.support_data_page_title(),
+    subtitle: () => m.support_data_page_subtitle(),
+    component: SupportDataPage,
   },
   {
     id: "upload",
