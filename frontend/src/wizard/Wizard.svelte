@@ -6,6 +6,7 @@
   control the buttons.
 -->
 <script lang="ts">
+  import type { Snippet } from "svelte";
   import { setWizard } from "./context";
   import type { WizardPageDef, WizardPageHooks } from "./types";
   import { m } from "../lib/paraglide/messages.js";
@@ -17,9 +18,11 @@
     onfinish: () => void;
     /** Called when Cancel is clicked and the page allows it. */
     oncancel: () => void;
+    /** Optional content shown at the left end of the button row. */
+    footerStart?: Snippet;
   }
 
-  let { pages, onfinish, oncancel }: Props = $props();
+  let { pages, onfinish, oncancel, footerStart }: Props = $props();
 
   /** Index of the nearest page from `start` (inclusive) moving by `step` that is shown, or -1. */
   function findShownPage(start: number, step: 1 | -1): number {
@@ -119,6 +122,7 @@
   </main>
 
   <footer class="flex justify-end gap-2 px-4 py-3">
+    {#if footerStart}<div class="mr-auto flex gap-2">{@render footerStart()}</div>{/if}
     <button class="dy-btn dy-btn-sm" disabled={!canBack} onclick={onBackClick}>{m.back()}</button>
     <button class="dy-btn dy-btn-sm dy-btn-primary" disabled={!canNext} onclick={onNextClick}>
       {#if busy}<span class="dy-loading dy-loading-spinner dy-loading-xs"></span>{/if}
