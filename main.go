@@ -30,7 +30,7 @@ func main() {
 
 	projectService := &ProjectService{}
 	if settings.Project != "" {
-		projectService.folder = filepath.Dir(settings.Project)
+		projectService.projectFolder = filepath.Dir(settings.Project)
 	}
 
 	// Create a new Wails application by providing the necessary options.

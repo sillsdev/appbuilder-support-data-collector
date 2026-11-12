@@ -1,6 +1,9 @@
 <script lang="ts">
+  import { getSelectedProjectDataItems } from "../../components/projectData";
   import { upload } from "../state.svelte";
   import { m } from "../../lib/paraglide/messages.js";
+
+  let selectedItems = $derived(getSelectedProjectDataItems(upload.selectedProjectData, upload.project));
 
   export function canNext(): boolean {
     return upload.accessGranted;
@@ -28,6 +31,24 @@
     aria-label={m.upload_location_aria()}
   />
 </fieldset>
+
+<section class="mt-5 rounded-box border border-base-300 bg-base-200 p-4">
+  <h3 class="text-sm font-semibold">{m.upload_data_selected_title()}</h3>
+  {#if selectedItems.length > 0}
+    <ul class="mt-2 list-inside list-disc text-sm">
+      {#each selectedItems as item (item.id)}
+        <li>{upload.project ? item.fileName(upload.project) : ""}</li>
+      {/each}
+    </ul>
+  {:else}
+    <p class="mt-2 text-sm text-base-content/70">
+      {m.upload_data_empty()}
+    </p>
+  {/if}
+  <p class="mt-3 text-sm text-base-content/70">
+    {m.upload_data_back_hint()}
+  </p>
+</section>
 
 <section class="mt-5 rounded-box border border-base-300 bg-base-200 p-4">
   <h3 class="text-sm font-semibold">{m.access_status()}</h3>

@@ -1,3 +1,5 @@
+@import "@fontsource-variable/noto-sans-sc";
+@import "@fontsource-variable/noto-sans-thai";
 @import "tailwindcss";
 @source not "../bindings";
 @plugin "daisyui" {
@@ -6,6 +8,13 @@
 }
 
 @layer base {
+  html:lang(zh-CN) {
+    font-family: "Noto Sans SC Variable", sans-serif;
+  }
+  html:lang(th) {
+    font-family: "Noto Sans Thai Variable", sans-serif;
+  }
+
   body {
     user-select: none;
   }

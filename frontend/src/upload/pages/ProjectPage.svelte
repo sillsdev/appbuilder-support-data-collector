@@ -6,6 +6,7 @@
   import { Dialogs } from "@wailsio/runtime";
   import { marked } from "marked";
   import { ProjectService } from "../../../bindings/github.com/sillsdev/appbuilder-support-data-collector";
+  import { getExpectedContentFolderName, projectDataItems } from "../../components/projectData";
   import { upload } from "../state.svelte";
   import { formatBytes, formatDateTime } from "../format";
   import { m } from "../../lib/paraglide/messages.js";
@@ -22,6 +23,11 @@
     error = "";
     try {
       upload.project = await ProjectService.GetProjectInfo(folder);
+      for (const item of projectDataItems) {
+        if (!item.isAvailable(upload.project)) {
+          upload.selectedProjectData[item.id] = false;
+        }
+      }
     } catch (e) {
       upload.project = undefined;
       error = e instanceof Error ? e.message : String(e);
